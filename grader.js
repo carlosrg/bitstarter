@@ -27,6 +27,7 @@ var cheerio = require('cheerio');
 var restler = require('restler');
 var HTMLFILE_DEFAULT = "index.html";
 var CHECKSFILE_DEFAULT = "checks.json";
+var TEMPFILE_DEFAULT = "temp.html";
 
 var assertFileExists = function(infile) {
     var instr = infile.toString();
@@ -71,12 +72,12 @@ if(require.main == module) {
 
     if(program.url) {
        restler.get(program.url).on('complete', function(result) {
-          if (result instanceof error) {
+          if (result instanceof Error) {
              console.error('ERROR: ' + result.message);
           }
           else {
-             fs.writeFileSync(DLFILE_DEFAULT, result);
-             var checkJson = checkHtmlFile(DLFILE_DEFAULT, program.checks);
+             fs.writeFileSync(TEMPFILE_DEFAULT, result);
+             var checkJson = checkHtmlFile(TEMPFILE_DEFAULT, program.checks);
              var outJson = JSON.stringify(checkJson, null, 4);
              console.log(outJson);
           } 
